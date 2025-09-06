@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 Blockchain Certificate System | Live on Sepolia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --secondary: #f59e0b;
+            --success: #10b981;
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --dark-bg: #0f0f23;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --glass: rgba(255, 255, 255, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: #a1a1aa;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 80%, rgba(120, 219, 255, 0.3) 0%, transparent 50%);
+            animation: bgShift 20s ease-in-out infinite;
+        }
+
+        @keyframes bgShift {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.1); }
+        }
+
+        /* Floating particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            animation: float 15s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Header Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            padding: 2rem;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 8vw, 6rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, #fff 0%, #6366f1 50%, #f59e0b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            animation: glow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 20px rgba(99, 102, 241, 0.5)); }
+            to { filter: drop-shadow(0 0 40px rgba(99, 102, 241, 0.8)); }
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            max-width: 600px;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid var(--success);
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            margin-bottom: 3rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section {
+            margin: 4rem 0;
+            padding: 3rem 0;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 3rem;
+            background: linear-gradient(135deg, #fff 0%, #6366f1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Glass Cards */
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 1rem 0;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.7s ease;
+        }
+
+        .glass-card:hover::before {
+            left: 100%;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.3);
+            border-color: rgba(99, 102, 241, 0.5);
+        }
+
+        /* Contract Info Grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .info-item {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 1.5rem;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .info-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px rgba(99, 102, 241, 0.2);
+        }
+
+        .info-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .info-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            word-break: break-all;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--primary);
+            border: none;
+            color: white;
+            padding: 0.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.8rem;
+        }
+
+        .copy-btn:hover {
+            background: var(--secondary);
+            transform: scale(1.1);
+        }
+
+        /* Deployment Process */
+        .process-timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .timeline-number {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-right: 2rem;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .timeline-content {
+            flex: 1;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 1.5rem;
+        }
+
+        .timeline-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Screenshot Gallery */
+        .screenshot-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .screenshot-card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 1rem;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .screenshot-card:hover {
+            transform: scale(1.05) rotateY(5deg);
+            box-shadow: 0 25px 50px rgba(99, 102, 241, 0.3);
+        }
+
+        .screenshot-placeholder {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .screenshot-placeholder::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                rgba(255, 255, 255, 0.1) 0px,
+                rgba(255, 255, 255, 0.1) 10px,
+                transparent 10px,
+                transparent 20px
+            );
+            animation: slide 3s linear infinite;
+        }
+
+        @keyframes slide {
+            0% { transform: translateX(-100px) translateY(-100px); }
+            100% { transform: translateX(100px) translateY(100px); }
+        }
+
+        .screenshot-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .screenshot-desc {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        /* Interactive Elements */
+        .verify-demo {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .demo-input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            color: white;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            width: 100%;
+            max-width: 400px;
+            margin: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .demo-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .verify-btn {
+            background: var(--gradient);
+            border: none;
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 1rem 0.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .verify-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.7s ease;
+        }
+
+        .verify-btn:hover::before {
+            left: 100%;
+        }
+
+        .verify-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Footer */
+        .footer {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .timeline-item {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .timeline-number {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading animations */
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 1s ease-in-out forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        .slide-up {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: slideUp 0.8s ease-out forwards;
+        }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animation"></div>
+    
+    <!-- Floating Particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="status-badge fade-in">
+            <div class="status-dot"></div>
+            LIVE ON SEPOLIA TESTNET
+        </div>
+        
+        <h1 class="hero-title slide-up">🚀 BLOCKCHAIN CERTIFICATE SYSTEM</h1>
+        <p class="hero-subtitle slide-up" style="animation-delay: 0.2s;">
+            Immutable • Verifiable • Decentralized<br>
+            The Future of Digital Credentials is Here
+        </p>
+        
+        <div class="glass-card slide-up" style="animation-delay: 0.4s; max-width: 600px;">
+            <h3 style="margin-bottom: 1rem; color: var(--primary);">🎯 Mission Accomplished</h3>
+            <p>Successfully deployed a complete blockchain-based certificate verification system on Ethereum Sepolia testnet. Featuring smart contract deployment, certificate issuance, and tamper-proof verification.</p>
+        </div>
+    </section>
+
+    <div class="container">
+        <!-- Contract Information -->
+        <section class="section">
+            <h2 class="section-title">📋 Smart Contract Details</h2>
+            
+            <div class="info-grid">
+                <div class="info-item slide-up">
+                    <button class="copy-btn" onclick="copyToClipboard('sepolia')">📋</button>
+                    <div class="info-label">🌐 Testnet Network</div>
+                    <div class="info-value">Sepolia Testnet</div>
+                </div>
+                
+                <div class="info-item slide-up" style="animation-delay: 0.1s;">
+                    <button class="copy-btn" onclick="copyToClipboard('0x4aB1e60d82f4B05889313A4d37A7d7b43a0dD211')">📋</button>
+                    <div class="info-label">📜 Contract Address</div>
+                    <div class="info-value">0x4aB1e60d82f4B05889313A4d37A7d7b43a0dD211</div>
+                </div>
+                
+                <div class="info-item slide-up" style="animation-delay: 0.2s;">
+                    <button class="copy-btn" onclick="copyToClipboard('0x6018D279891D7732223c44f0687871Bcd5a981Cd')">📋</button>
+                    <div class="info-label">👤 Deployer Wallet 1</div>
+                    <div class="info-value">0x6018D279891D7732223c44f0687871Bcd5a981Cd</div>
+                </div>
+                
+                <div class="info-item slide-up" style="animation-delay: 0.3s;">
+                    <button class="copy-btn" onclick="copyToClipboard('0xb6F0e49842e9d484184f9587A498a44535be7aC6')">📋</button>
+                    <div class="info-label">👤 Deployer Wallet 2</div>
+                    <div class="info-value">0xb6F0e49842e9d484184f9587A498a44535be7aC6</div>
+                </div>
+            </div>
+
+            <div class="glass-card slide-up" style="animation-delay: 0.4s;">
+                <h3 style="margin-bottom: 1rem; color: var(--success);">✅ Deployment Status</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">✅</div>
+                        <div>Contract Deployed</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">🎫</div>
+                        <div>Certificates Issued</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">🔍</div>
+                        <div>Verification Active</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">🛡️</div>
+                        <div>Tamper Proof</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Deployment Process -->
+        <section class="section">
+            <h2 class="section-title">🛠️ How I Built It</h2>
+            
+            <div class="process-timeline">
+                <div class="timeline-item slide-up">
+                    <div class="timeline-number">1</div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">🧠 Smart Contract Development</div>
+                        <p>Coded the certificate smart contract in Remix IDE, implementing ERC-721 NFT standards for unique, verifiable certificates with on-chain storage and validation.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item slide-up" style="animation-delay: 0.2s;">
+                    <div class="timeline-number">2</div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">🔗 MetaMask Integration</div>
+                        <p>Connected Remix to MetaMask wallet and switched to Sepolia testnet for deployment. Configured gas settings and transaction parameters for optimal deployment.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item slide-up" style="animation-delay: 0.4s;">
+                    <div class="timeline-number">3</div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">🚀 Contract Deployment</div>
+                        <p>After thorough testing and triple-checking, deployed the contract to Sepolia. MetaMask confirmed the transaction, and the smart contract went live on the blockchain.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item slide-up" style="animation-delay: 0.6s;">
+                    <div class="timeline-number">4</div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">🧪 Testing & Verification</div>
+                        <p>The certificate couldn’t be verified on time due to a technical delay on the verification system’s end. I’ve attached screenshots as proof. All certificates are stored on-chain, making them impossible to fake and providing decentralized verification.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Screenshots Section -->
+        <section class="section">
+            <h2 class="section-title">📸 Deployment Evidence</h2>
+            
+            <div class="screenshot-grid">
+                <div class="screenshot-card slide-up">
+                    <img src="12.png" alt="Screenshot description" style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px;">
+                    <div class="screenshot-title">Etherscan Contract </div>
+                    <div class="screenshot-desc">Contract successfully deployed and verified on Sepolia Etherscan with full source code visibility</div>
+                </div>
+                
+                <div class="screenshot-card slide-up" style="animation-delay: 0.1s;">
+                   <img src="13.png" alt="Screenshot description" style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px;">
+                    <div class="screenshot-title">Etherscan Contract</div>
+                    <div class="screenshot-desc">Complete transaction history showing contract deployment and certificate issuance activities</div>
+                </div>
+                
+                <div class="screenshot-card slide-up" style="animation-delay: 0.2s;">
+                    <img src="11.png" alt="Screenshot description" style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px;">
+                    <div class="screenshot-title">Remix IDE Deployment</div>
+                    <div class="screenshot-desc">Remix interface showing successful smart contract compilation and deployment process</div>
+                </div>
+                
+                <div class="screenshot-card slide-up" style="animation-delay: 0.3s;">
+                   <img src="14].png" alt="Screenshot description" style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px;">
+                    <div class="screenshot-title">MetaMask Activity</div>
+                    <div class="screenshot-desc">MetaMask transaction confirmations and wallet activity showing deployment transactions</div>
+                </div>
+            </div>
+            
+            <div class="glass-card slide-up" style="animation-delay: 0.4s;">
+                <h3 style="margin-bottom: 1rem; color: var(--secondary);">📋 Evidence Available</h3>
+                <p>Complete documentation available including:</p>
+                <ul style="list-style: none; padding: 0; margin-top: 1rem;">
+                    <li style="padding: 0.5rem 0;"><span style="color: var(--success);">✅</span> Etherscan contract verification screenshots</li>
+                    <li style="padding: 0.5rem 0;"><span style="color: var(--success);">✅</span> Remix deployment and transaction screenshots</li>
+                    <li style="padding: 0.5rem 0;"><span style="color: var(--success);">✅</span> MetaMask activity and confirmation screens</li>
+                    <li style="padding: 0.5rem 0;"><span style="color: var(--success);">✅</span> Complete transaction hash documentation</li>
+                </ul>
+            </div>
+        </section>
+
+       
+        <!-- Technical Features -->
+        <section class="section">
+            <h2 class="section-title">⚡ System Features</h2>
+            
+            <div class="info-grid">
+                <div class="glass-card slide-up">
+                    <h3 style="color: var(--primary); margin-bottom: 1rem;">🛡️ Security First</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="padding: 0.5rem 0;"><span style="color: var(--success);">✅</span> Immutable blockchain storage</li>
+                        <li style="padding: 0.5rem 0;"><span style="color: var(--success);">✅</span> Cryptographic verification</li>
+                        <li style="padding: 0.5rem 0;"><span style="color: var(--success);">✅</span> Tamper-proof certificates</li>
+                        <li style="padding: 0.5rem 0;"><span style="color: var(--success);">✅</span> Decentralized validation</li>
+                    </ul>
+                </div>
+                
+                <div class="glass-card slide-up" style="animation-delay: 0.1s;">
+                    <h3 style="color: var(--secondary); margin-bottom: 1rem;">🚀 Performance</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="padding: 0.5rem 0;"><span style="color: var(--success);">⚡</span> Instant verification</li>
+                        <li style="padding: 0.5rem 0;"><span style="color: var(--success);">⚡</span> Global accessibility</li>
+                        <li style="padding: 0.5rem 0;"><span style="color: var(--success);">⚡</span> 24/7 availability</li>
+                        <li style="padding: 0.5rem 0;"><span style="color: var(--success);">⚡</span> Low gas costs</li>
+                    </ul>
+                </div>
+                
+                <div class="glass-card slide-up" style="animation-delay: 0.2s;">
+                    <h3 style="color: var(--primary); margin-bottom: 1rem;">🎯 Use Cases</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="padding: 0.5rem 0;"><span style="color: var(--secondary);">🎓</span> Academic certificates</li>
+                        <li style="padding: 0.5rem 0;"><span style="color: var(--secondary);">🏆</span> Professional credentials</li>
+                        <li style="padding: 0.5rem 0;"><span style="color: var(--secondary);">📜</span> Training completions</li>
+                        <li style="padding: 0.5rem 0;"><span style="color: var(--secondary);">🏅</span> Achievement badges</li>
+                    </ul>
+                </div>
+                    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="glass-card" style="text-align: center; padding: 1.5rem;">
+                <p style="margin: 0; color: var(--text-secondary);">Developed by</p>
+                <h3 style="color: var(--primary); margin: 0.5rem 0; font-size: 1.5rem;">Mridul Thakur</h3>
+                <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">Blockchain Certificate System</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+       
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.width = Math.random() * 4 + 2 + 'px';
+                particle.style.height = particle.style.width;
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Copied to clipboard: ' + text);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
+
+       
+        window.addEventListener('load', () => {
+            createParticles();
+            
+            
+            document.querySelectorAll('.slide-up').forEach((el, index) => {
+                el.style.animationDelay = (index * 0.1) + 's';
+            });
+        });
+    </script>
+</body>
+</html>
