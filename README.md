@@ -72,7 +72,7 @@ I’ve attached screenshots of:
 
 I also set up a simple frontend  (hosted on GitHub Pages).  
 
-\*\*https://mridul9-git.github.io/certificate-frontend/\*\*  
+https://mridul9-git.github.io/certificate-frontend/  
 
 
 
